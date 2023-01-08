@@ -1,5 +1,5 @@
 ﻿@using Demo.Models
-@model IEnumerable<ProductWithCount>
+@model IEnumerable<ProductViewModel>
 
 <div class="container p-3">
     <div class="row pt-4">
@@ -20,7 +20,6 @@
                 <th>Product</th>
                 <th>View</th>
                 <th>Price</th>
-                <th>Count</th>
                 <th></th>
             </tr>
         </thead>
@@ -28,19 +27,14 @@
             @foreach (var product in Model)
             {
                 <tr>
-                    <td>@product.ProductViewModel.Name</td>
+                    <td>@product.Name</td>
                     <td>
                         <img class="card-img-top img-fluid d-block mx-auto mb-3" style="width:200px" @*src="@WebConstants.ImagePath@product.ProductViewModel.PicturePath"*@ alt="Card image cap">
                     </td>
-                    <td>@product.ProductViewModel.Price.ToString("c")</td>
+                    <td>@product.Price.ToString("c")</td>                    
                     <td class="text-center">
-                        <div class="col-8">
-                            <input asp-for="@product.Count" class="form-control" />
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <a asp-controller="Price" asp-route-id="@product.ProductViewModel.ProductId" asp-action="AddToBasket" class="btn btn-primary mx-2">
-                            Add to basket
+                        <a asp-controller="Price" asp-route-id="@product.ProductId" asp-action="AddToBasket" class="btn btn-primary mx-2">
+                            Choose quantity
                         </a>
                     </td>
                 </tr>

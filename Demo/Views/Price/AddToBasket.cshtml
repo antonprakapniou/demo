@@ -1,0 +1,26 @@
+﻿@using Demo.Models
+@model ProductWithCount
+
+<form method="post"asp-controller="Price" asp-action="AddToBasket" >
+    <input asp-for="@Model.ProductViewModel.ProductId" hidden />
+    <table class="table table-bordered table-striped table-hover" style="width:100%">
+        <tr>
+            <td>@Model.ProductViewModel.Name</td>
+            <td>
+                <img class="card-img-top img-fluid d-block mx-auto mb-3" style="width:200px" @*src="@WebConstants.ImagePath@product.ProductViewModel.PicturePath"*@ alt="Card image cap">
+            </td>
+            <td>@Model.ProductViewModel.Price.ToString("c")</td>
+            <td>
+                <input asp-for="Count" class="form-control" />
+            </td>
+            <td class="text-center">
+                <input type="submit" class="btn btn-info w-100" value="Add to basket" />
+            </td>
+            <td>
+                <a asp-controller="Price" asp-action="Index" class="btn btn-success w-100">
+                    Back to price
+                </a>
+            </td>
+        </tr>
+    </table>    
+</form>

@@ -1,0 +1,16 @@
+﻿@using Demo.Models
+@model IEnumerable<ProductWithCount>
+
+@foreach (var product in Model)
+{
+        <table class="table table-bordered table-striped table-hover" style="width:100%">
+            <tr>
+                <td>@product.ProductViewModel.Name</td>
+                <td>
+                    <img class="card-img-top img-fluid d-block mx-auto mb-3" style="width:200px" @*src="@WebConstants.ImagePath@product.ProductViewModel.PicturePath"*@ alt="Card image cap">
+                </td>
+                <td>@product.ProductViewModel.Price.ToString("c")</td>
+                <td>@product.Count</td>                
+            </tr>
+        </table>    
+}
