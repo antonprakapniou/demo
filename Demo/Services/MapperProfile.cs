@@ -8,7 +8,6 @@ namespace Demo.Services
         public MapperProfile()
         {
             CreateMap<Product,ProductViewModel>().ReverseMap();
-            CreateMap<User,UserViewModel>().ReverseMap();
         }
     }
 }

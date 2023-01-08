@@ -37,13 +37,14 @@ namespace Demo.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToBasket(Guid id, ProductWithCount productWithCount)
         {
-            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);
             Basket basket = new();
+
+            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);            
 
             if (basketSession!=null
                 &&basketSession!.TotalCount>0)
             {
-                basket=basketSession!;
+                basket=basketSession!;//basket properties saved to coockies
             }
 
             var product = await _productService.GetProductByIdAsync(id);
@@ -58,7 +59,7 @@ namespace Demo.Controllers
             basket.TotalCount=basket.Products.Sum(p => p.Count);
             basket.TotalPrice=basket.Products.Sum(p => p.Count*p.ProductViewModel.Price);
 
-            HttpContext.Session.Set(WebConstants.BasketSession, basket);
+            HttpContext.Session.Set(WebConstants.BasketSession, basket);//basket properties saved to coockies with changes
             return RedirectToAction(nameof(Index));
         }
     }

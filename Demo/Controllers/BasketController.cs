@@ -1,16 +1,18 @@
 ﻿using Demo.Extensions;
 using Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Controllers
 {
+    [Authorize]
     public class BasketController : Controller
     {
         public IActionResult Index()
         {
-            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);
-
             Basket basket = new();
+
+            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);
 
             if (basketSession!=null
                 &&basketSession!.TotalCount>0)

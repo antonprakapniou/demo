@@ -2,6 +2,7 @@ using Demo.EF;
 using Demo.Interfaces;
 using Demo.Repositories;
 using Demo.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,10 +16,16 @@ string connectionString = builder
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+    options.SignIn.RequireConfirmedAccount = true)
+        .AddDefaultTokenProviders()
+        .AddDefaultUI()
+        .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<IProductService,ProductService>();
-builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout=TimeSpan.FromMinutes(10);
@@ -26,6 +33,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential= true;
 });
 
+//builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -37,13 +45,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
+app.UseAuthentication();
 app.UseSession();
+app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
