@@ -1,8 +1,20 @@
 ﻿@using Demo.Models
-@model IEnumerable<ProductWithCount>
+@model Basket
 
-@foreach (var product in Model)
+@if (Model.Products.Count==0)
 {
+    <p>
+        Basket is empty
+        <a asp-controller="Price" asp-action="Index" class="btn btn-success">
+            Back to price
+        </a>
+    </p>
+}
+
+else
+{
+    foreach (var product in Model.Products)
+    {
         <table class="table table-bordered table-striped table-hover" style="width:100%">
             <tr>
                 <td>@product.ProductViewModel.Name</td>
@@ -10,7 +22,15 @@
                     <img class="card-img-top img-fluid d-block mx-auto mb-3" style="width:200px" @*src="@WebConstants.ImagePath@product.ProductViewModel.PicturePath"*@ alt="Card image cap">
                 </td>
                 <td>@product.ProductViewModel.Price.ToString("c")</td>
-                <td>@product.Count</td>                
+                <td>@product.Count</td>       
+                <td>@product.GeneralPrice.ToString("c")</td>
             </tr>
-        </table>    
+        </table> 
+    }
+<p>
+    @Model.TotalCount
+</p>
+<p>
+    @Model.TotalPrice.ToString("c")
+</p>
 }

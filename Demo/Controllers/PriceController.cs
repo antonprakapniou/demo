@@ -37,23 +37,28 @@ namespace Demo.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToBasket(Guid id, ProductWithCount productWithCount)
         {
-            List<ProductWithCount> basket = new();
+            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);
+            Basket basket = new();
 
-            if (HttpContext.Session.Get<IEnumerable<ProductWithCount>>(WebConstants.SessionCart)!=null
-                &&HttpContext.Session.Get<IEnumerable<ProductWithCount>>(WebConstants.SessionCart)!.Count()>0)
+            if (basketSession!=null
+                &&basketSession!.TotalCount>0)
             {
-                basket=HttpContext.Session.Get<List<ProductWithCount>>(WebConstants.SessionCart)!;
+                basket=basketSession!;
             }
 
             var product = await _productService.GetProductByIdAsync(id);
 
-            basket.Add(new ProductWithCount
+            basket.Products.Add(new ProductWithCount
             {
                 ProductViewModel = product,
-                Count=productWithCount.Count
+                Count=productWithCount.Count,
+                GeneralPrice=productWithCount.Count*product.Price
             });
 
-            HttpContext.Session.Set(WebConstants.SessionCart, basket);
+            basket.TotalCount=basket.Products.Sum(p => p.Count);
+            basket.TotalPrice=basket.Products.Sum(p => p.Count*p.ProductViewModel.Price);
+
+            HttpContext.Session.Set(WebConstants.BasketSession, basket);
             return RedirectToAction(nameof(Index));
         }
     }

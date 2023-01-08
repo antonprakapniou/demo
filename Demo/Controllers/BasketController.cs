@@ -8,12 +8,14 @@ namespace Demo.Controllers
     {
         public IActionResult Index()
         {
-            List<ProductWithCount> basket = new();
+            var basketSession = HttpContext.Session.Get<Basket>(WebConstants.BasketSession);
 
-            if (HttpContext.Session.Get<IEnumerable<ProductWithCount>>(WebConstants.SessionCart)!=null
-                &&HttpContext.Session.Get<IEnumerable<ProductWithCount>>(WebConstants.SessionCart)!.Count()>0)
+            Basket basket = new();
+
+            if (basketSession!=null
+                &&basketSession!.TotalCount>0)
             {
-                basket=HttpContext.Session.Get<IEnumerable<ProductWithCount>>(WebConstants.SessionCart)!.ToList();
+                basket=basketSession!;
             }
 
             return View(basket);
